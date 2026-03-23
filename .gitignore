@@ -1,0 +1,7 @@
+data/raw/
+data/cleaned/hf_dataset/
+__pycache__/
+*.py[cod]
+.env
+venv/
+*.log

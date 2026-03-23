@@ -1,0 +1,105 @@
+name: Zama - Haitian Creole Data Collection
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Ki script pou kouri'
+        required: true
+        default: 'ultimate'
+        type: choice
+        options:
+          - ultimate
+          - scraper_only
+          - both
+
+  schedule:
+    - cron: '0 2 * * 1,4'
+
+permissions:
+  contents: write
+
+jobs:
+  collect-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install \
+            requests==2.31.0 \
+            beautifulsoup4==4.12.3 \
+            lxml \
+            tqdm \
+            wikipedia-api \
+            pdfplumber \
+            datasets \
+            pandas \
+            urllib3
+
+      - name: Run zama_ultimate.py
+        if: ${{ github.event.inputs.mode != 'scraper_only' }}
+        run: python scripts/zama_ultimate.py
+
+      - name: Run scraper.py
+        if: ${{ github.event.inputs.mode == 'scraper_only' || github.event.inputs.mode == 'both' }}
+        run: python scripts/scraper.py
+
+      - name: Verify data
+        run: |
+          echo "========================================"
+          echo "STATISTIK DONE:"
+          cat data/cleaned/stats.json 2>/dev/null || echo "stats.json pa la"
+          echo "FICHYE PWODWI:"
+          ls -lh data/cleaned/ 2>/dev/null || echo "Dossye vid"
+          du -sh data/ 2>/dev/null
+
+      - name: Commit and Push dataset
+        run: |
+          git config user.name "ZamaBot"
+          git config user.email "administration@zamasof.com"
+          git add data/cleaned/dataset_final.jsonl       || true
+          git add data/cleaned/dataset_final.csv         || true
+          git add data/cleaned/dataset_creole_only.jsonl || true
+          git add data/cleaned/stats.json                || true
+          if git diff --staged --quiet; then
+            echo "Pa gen chanjman."
+          else
+            TOTAL=$(python -c "import json; s=json.load(open('data/cleaned/stats.json')); print(str(s.get('total_records',0))+' teks - '+str(s.get('total_mb',0))+' MB')" 2>/dev/null || echo "done aktyalize")
+            git commit -m "Auto-update dataset - $TOTAL - $(date +'%Y-%m-%d %H:%M')"
+            git pull --rebase origin main || true
+            git push origin HEAD:main
+            echo "Done push avek siksè!"
+          fi
+
+      - name: Upload artifact backup
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: zama-dataset-run-${{ github.run_number }}
+          path: |
+            data/cleaned/dataset_final.jsonl
+            data/cleaned/dataset_creole_only.jsonl
+            data/cleaned/stats.json
+            data/logs/
+          retention-days: 30
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "ZAMA RUN ${{ github.run_number }} FINI - $(date)"
