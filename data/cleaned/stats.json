@@ -1,0 +1,36 @@
+{
+  "total_records": 42768,
+  "ht_records": 37344,
+  "ht_mix_records": 5288,
+  "total_mb": 23.16,
+  "avg_creole_score": 0.507,
+  "by_source": {
+    "cc100_ht": 31357,
+    "fineweb": 4998,
+    "leipzig_wiki_ht": 3424,
+    "flores_ht": 849,
+    "wikipedia_ht": 630,
+    "voanouvel.com": 200,
+    "rezonodwes.com": 200,
+    "tripfoumi.com": 150,
+    "lenouvelliste.com": 130,
+    "tanbou.com": 126,
+    "ht.wikipedia.org": 112,
+    "www.paho.org": 104,
+    "www.tanbou.com": 84,
+    "vantbefinfo.com": 77,
+    "aecid.ht": 68,
+    "haiti.mit.edu": 67,
+    "www.haitilibre.com": 62,
+    "akademikreyol.net": 37,
+    "tipiti.biz": 33,
+    "radiotelevisioncaraibes.com": 24
+  },
+  "by_language": {
+    "ht": 37344,
+    "ht_fr_mix": 5288,
+    "fr": 91,
+    "fr_with_ht": 45
+  },
+  "generated_at": "2026-03-23T03:00:22.970641"
+}
