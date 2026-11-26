@@ -1,23 +1,23 @@
 {
-  "total_records": 15637,
-  "creole_ht": 10261,
-  "creole_mix": 5284,
-  "french": 92,
-  "total_mb": 14.1,
+  "total_records": 15813,
+  "creole_ht": 10448,
+  "creole_mix": 5325,
+  "french": 40,
+  "total_mb": 14.57,
   "unique_domains": 0,
   "top_domains": {},
   "by_category": {
     "wiki": 8714,
     "web": 4998,
-    "news": 1198,
+    "news": 1374,
     "encyclopedie": 672,
     "fraz": 55
   },
   "by_language": {
-    "ht": 10261,
-    "ht_fr_mix": 5284,
-    "fr": 92
+    "ht": 10448,
+    "ht_fr_mix": 5325,
+    "fr": 40
   },
-  "avg_creole_score": 0.3562,
-  "generated_at": "2026-11-23T11:23:20.899183"
+  "avg_creole_score": 0.3542,
+  "generated_at": "2026-11-26T11:45:16.263113"
 }
